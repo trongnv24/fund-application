@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Create User Table -->
+    <changeSet id="1" author="author">
+        <createTable tableName="user">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name=" user_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="fullName" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="address" type="VARCHAR(255)"/>
+            <column name="is_activated" type="BOOLEAN"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="BIGINT"/>
+            <column name="last_updated_by" type="VARCHAR(255)"/>
+            <column name="last_updated_at" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create Fund Table -->
+    <changeSet id="2" author="author">
+        <createTable tableName="fund">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="owner_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="BIGINT"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="BIGINT"/>
+            <column name="last_updated_by" type="VARCHAR(255)"/>
+            <column name="last_updated_at" type="BIGINT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="fund"
+                                 baseColumnNames="owner_id"
+                                 constraintName="fk_fund_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Create Fund_User Table -->
+    <changeSet id="3" author="author">
+        <createTable tableName="fund_user">
+            <column name="fund_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey constraintName="pk_fund_user"
+                       columnNames="fund_id, user_id"
+                       tableName="fund_user"/>
+
+        <addForeignKeyConstraint baseTableName="fund_user"
+                                 baseColumnNames="fund_id"
+                                 constraintName="fk_fund_user_fund"
+                                 referencedTableName="fund"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="fund_user"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_fund_user_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Create Transaction Table -->
+    <changeSet id="4" author="author">
+        <createTable tableName="transaction">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="BIGINT"/>
+            <column name="amount" type="BIGINT"/>
+            <column name="type" type="VARCHAR(255)"/>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="transaction"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_transaction_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Create Vote Table -->
+    <changeSet id="5" author="author">
+        <createTable tableName="vote">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="createDate" type="BIGINT"/>
+            <column name="category" type="VARCHAR(255)"/>
+            <column name="amount" type="BIGINT"/>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="vote"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_vote_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Create Notification Table -->
+    <changeSet id="6" author="author">
+        <createTable tableName="notification">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="amount" type="BIGINT"/>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="notification"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_notification_user"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
